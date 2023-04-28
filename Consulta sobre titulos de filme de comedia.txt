@@ -1,0 +1,11 @@
+select * from film_category 
+
+select f.title, ca.name from Film f
+
+INNER JOIN 
+
+right join category ca on ca.category_id = film_id
+
+select f1.title from film f1
+ inner join film_category fc on fc.film_id = f1.film_id
+ inner join category cc on cc.category_id = fc.category_id
