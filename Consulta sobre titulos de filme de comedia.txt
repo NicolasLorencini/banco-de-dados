@@ -1,4 +1,9 @@
-select * from film_category 
+select * from category
+
+select * from film
+
+select * from film_category
+
 
 select f.title, ca.name from Film f
 
@@ -9,3 +14,37 @@ right join category ca on ca.category_id = film_id
 select f1.title from film f1
  inner join film_category fc on fc.film_id = f1.film_id
  inner join category cc on cc.category_id = fc.category_id
+ where fc.category_id = 5;
+ 
+ 
+ select count (*) 
+from film f1
+ inner join film_category fc on fc.film_id = f1.film_id
+ inner join category cc on cc.category_id = fc.category_id
+ where fc.category_id = 1;
+ 
+ 
+ select sum (amount) from payment where customer_id = 23
+ 
+ 
+  select * from customer
+  
+  select * from rental
+  
+  where first_name = 'Sarah'
+  
+  
+  select f.actor_id , ac.first_name || ' ' || ac.last_name, count (*) from film_actor f
+  inner join actor ac on ac.actor_id = f.actor_id
+  group by f.actor_id, ac.first_name || ' ' || ac.last_name
+  
+  
+  select s.staff_id, count (*) as payment_id from staff s
+  inner join payment py on py.staff_id = s.staff_id
+  group by s.staff_id
+  
+  
+  --qual o valor que cada funcionário já alugou
+  
+  -- Quantos filmes existem no estoque de cada loja
+ 
