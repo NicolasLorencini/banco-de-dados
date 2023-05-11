@@ -1,0 +1,52 @@
+CREATE TABLE aluno(
+
+	id int GENERATED ALWAYS AS IDENTITY,
+	nome varchar (40) NOT NULL,
+	idade int NOT NULL,
+	nota_aluno int NOT NULL,
+	PRIMARY KEY (id)
+
+)
+
+CREATE TABLE aluno_alteracoes(
+
+	id int GENERATED ALWAYS AS IDENTITY,
+	aluno_id INT NOT NULL,
+	nome varchar (40) NOT NULL,
+	idade int NOT NULL,
+	nota_aluno int NOT NULL,
+	changed_on TIMESTAMP(6) NOT NULL
+
+)
+
+CREATE OR REPLACE FUNCTION log_nota_aluno_changes()
+	RETURNS TRIGGER
+	LANGUAGE PLPGSQL
+	AS
+  $$
+  BEGIN
+  	  IF NEW.nota_aluno <> OLD.nota_aluno THEN
+	    INSERT INTO aluno_alteracoes (aluno_id, nome, idade, nota_aluno, changed_on)
+		VALUES (OLD.id, OLD.nome, OLD.idade, OLD.nota_aluno, now());
+		
+	END IF;
+	RETURN NEW;
+ END;
+  $$
+  
+  CREATE TRIGGER aluno_changes
+   BEFORE UPDATE
+   ON aluno
+   FOR EACH ROW
+   EXECUTE PROCEDURE log_nota_aluno_changes();
+   
+   insert into aluno (nome, idade, nota_aluno)
+   values('ERICK', 15, 6);
+   insert into aluno (nome, idade, nota_aluno)
+   values ('Lucas', 12, 5);
+   insert into aluno (nome, idade, nota_aluno)
+   values ('Jão', 42, 7);
+   
+   select*from aluno_alteracoes
+   select*from aluno order by id asc
+   UPDATE aluno set nota_aluno = 7 WHERE ID = 3
