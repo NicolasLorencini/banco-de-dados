@@ -1,0 +1,34 @@
+SELECT*FROM film
+
+CREATE TABLE film_aud(
+    
+	id int GENERATED ALWAYS AS IDENTITY,
+    film_id INT NOT NULL,
+	title varchar(255) NOT NULL,
+	changed_on TIMESTAMP(6) NOT NULL
+);
+
+CREATE OR REPLACE FUNCTION log_last_tittle_changes()
+	RETURNS TRIGGER
+	LANGUAGE PLPGSQL
+	AS
+  $$
+  BEGIN
+  		IF NEW.title <> OLD.title THEN
+		INSERT INTO film_aud (film_id, tittle, changed_on)
+			values (OLD.id, OLD.title, now());
+			
+			END IF;
+			RETURN NEW;
+		END;
+		$$
+		
+		CREATE TRIGGER film_changes
+		
+		BEFORE UPDATE
+		ON film
+		FOR EACH ROW
+		EXECUTE PROCEDURE log_last_tittle_changes();
+		
+		insert into film (title)
+		values ('CARAIBAS')
